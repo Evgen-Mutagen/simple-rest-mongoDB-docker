@@ -28,7 +28,9 @@ public class UserController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public User addNewUsers(@RequestBody User user) {
         LOG.info("Saving user.");
-        return userRepository.save(user);
+        User newUser = userRepository.save(new User(user.getUserId(), user.getFirstName(), user.getLastName(),
+                user.getEmail(), user.getPhoneNumber()));
+        return userRepository.save(newUser);
     }
 
     @RequestMapping(value = "/id/{userId}", method = RequestMethod.GET)
