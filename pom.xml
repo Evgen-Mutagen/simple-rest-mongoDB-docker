@@ -53,6 +53,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>simple-rest-mongoDB-docker</finalName>
 	</build>
 	<repositories>
 		<repository>
