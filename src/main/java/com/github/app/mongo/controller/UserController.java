@@ -28,6 +28,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
+    @Operation(summary = "Получить информацию о всех пользователях")
     public List<User> getAllUsers() {
         LOG.info("Getting all users.");
         initializationUsers();
@@ -41,7 +42,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @RequestMapping(value = "/update/{userId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/id/{userId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Обновить информацию о пользователе")
     public void update(@Parameter(description = "id пользователя") @PathVariable String userId, @Valid @RequestBody User user) {
@@ -49,7 +50,6 @@ public class UserController {
         Optional<User> oldUser = userRepository.findById(userId);
         if (oldUser.isPresent()) {
             User updatedUser = oldUser.get();
-            updatedUser.setUserId(user.getUserId());
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setEmail(user.getEmail());
