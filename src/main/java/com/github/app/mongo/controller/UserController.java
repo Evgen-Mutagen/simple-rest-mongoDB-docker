@@ -3,6 +3,9 @@ package com.github.app.mongo.controller;
 
 import com.github.app.mongo.model.User;
 import com.github.app.mongo.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/")
 @AllArgsConstructor
+@Tag(
+        name = "Пользователи",
+        description = "Все методы для работы с пользователями системы"
+)
 public class UserController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
@@ -32,7 +39,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/id/{userId}", method = RequestMethod.GET)
-    public Optional<User> getUserById(@PathVariable String userId) {
+    @Operation(summary = "Получить информацию о пользователе по его id")
+    public Optional<User> getUserById(@Parameter(description = "id пользователя")@PathVariable String userId) {
         LOG.info("Getting user with ID: {}.", userId);
         return userRepository.findById(userId);
     }
