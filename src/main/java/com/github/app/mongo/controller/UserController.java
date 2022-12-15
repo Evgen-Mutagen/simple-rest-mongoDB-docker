@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api")
 @AllArgsConstructor
 @Tag(
         name = "Пользователи",
