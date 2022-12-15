@@ -27,7 +27,7 @@ public class UserController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping(value = "")
     @Operation(summary = "Получить информацию о всех пользователях")
     public List<User> getAllUsers() {
         LOG.info("Getting all users.");
@@ -35,38 +35,35 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping(value = "/create")
     @Operation(summary = "Добавить нового пользователя")
     public User addNewUsers(@Valid @RequestBody User user) {
         LOG.info("Saving user.");
         return userRepository.save(user);
     }
 
-    @RequestMapping(value = "/id/{userId}", method = RequestMethod.PUT)
+    @PutMapping(value = "/update/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Обновить информацию о пользователе")
     public void update(@Parameter(description = "id пользователя") @PathVariable String userId, @Valid @RequestBody User user) {
         LOG.info("update {} with id={}", user, userId);
-        Optional<User> oldUser = userRepository.findById(userId);
-        if (oldUser.isPresent()) {
-            User updatedUser = oldUser.get();
-            updatedUser.setFirstName(user.getFirstName());
-            updatedUser.setLastName(user.getLastName());
-            updatedUser.setEmail(user.getEmail());
-            updatedUser.setPhoneNumber(user.getPhoneNumber());
-            userRepository.save(updatedUser);
-        }
+        User updateUser = userRepository.findById(user.getUserId()).orElseThrow(() ->
+                new IllegalArgumentException("model doesn't exist"));
+        updateUser.setFirstName(user.getFirstName());
+        updateUser.setLastName(user.getLastName());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setPhoneNumber(user.getPhoneNumber());
+        userRepository.save(updateUser);
     }
 
-
-    @RequestMapping(value = "/id/{userId}", method = RequestMethod.GET)
+    @GetMapping(value = "/id/{userId}")
     @Operation(summary = "Получить информацию о пользователе по его id")
     public Optional<User> getUserById(@Parameter(description = "id пользователя") @PathVariable String userId) {
         LOG.info("Getting user with ID: {}.", userId);
         return userRepository.findById(userId);
     }
 
-    @RequestMapping(value = "/name/{firstName}", method = RequestMethod.GET)
+    @GetMapping(value = "/name/{firstName}")
     @Operation(summary = "Получить информацию о пользователе по его имени")
     public List<User> getUserByName(@Parameter(description = "имя пользователя") @PathVariable String firstName) {
         LOG.info("Getting user with firstName: {}.", firstName);
