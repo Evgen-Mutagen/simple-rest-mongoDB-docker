@@ -1,8 +1,10 @@
 package com.github.app.mongo.controller;
 
 
+import com.github.app.mongo.model.Role;
 import com.github.app.mongo.model.User;
 import com.github.app.mongo.repository.UserRepository;
+import com.github.app.mongo.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,7 @@ import java.util.Optional;
 public class UserController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
+    private final AuthService authService;
 
     @GetMapping(value = "")
     @Operation(summary = "Получить информацию о всех пользователях")
@@ -79,11 +83,11 @@ public class UserController {
     }
 
     public void initializationUsers() {
-        addNewUsers(new User("45", "user1", "user2", "user1@mail.ru", "867677686"));
-        addNewUsers(new User("46", "user2", "user2", "user2@mail.ru", "43534534"));
-        addNewUsers(new User("47", "user3", "user2", "user2@mail.ru", "6666666666"));
+        addNewUsers(new User("45", "user1", "user2", "user1@mail.ru",
+                "867677686", Collections.singleton(Role.USER),"qwerty"));
+        addNewUsers(new User("46", "user2", "user2", "user2@mail.ru",
+                "43534534", Collections.singleton(Role.ADMIN), "qwerty"));
     }
 }
-
 
 
